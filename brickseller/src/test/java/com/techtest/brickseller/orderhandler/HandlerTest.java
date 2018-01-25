@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.techtest.brickseller.objects.AcceptedOrder;
 import com.techtest.brickseller.objects.OrderRequest;
+import com.techtest.brickseller.objects.OrderRequestFactory;
 import com.techtest.brickseller.objects.Orders;
 import com.techtest.brickseller.orderhandler.Handler;
 
@@ -17,11 +18,13 @@ public class HandlerTest {
 
 	Handler handler;
 	OrderRequest orderRequest;
+	OrderRequestFactory orderFactory;
 	
 	@Before
 	public void setUp() throws Exception {
 		handler = new Handler();
 		Handler.orders = new Orders();
+		orderFactory = new OrderRequestFactory();
 	}
 
 	@After
@@ -30,10 +33,7 @@ public class HandlerTest {
 
 	@Test
 	public void verifyNewOrderHandlerReturnsUniqueReferenceCodeWithValidOrderRequest() {
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String orderReference = handler.newOrderHandler(orderRequest);
 		assertNotNull(orderReference);
 	}
@@ -47,10 +47,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyGetOrderByReferenceReturnsCorrectOrderWithReference(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		AcceptedOrder returnedOrder = handler.getOrderByReference(reference);
 		assertTrue(returnedOrder.getUsername().equals("Tester"));
@@ -62,10 +59,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyGetOrderByReferenceReturnsNullWithIncorrectReference(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		AcceptedOrder returnedOrder = handler.getOrderByReference("IncorrectReference");
 		assertNull(returnedOrder);
 	}
@@ -73,20 +67,11 @@ public class HandlerTest {
 	@Test
 	public void verifyGetAllOrdersReturnsAllCurrentAcceptedOrders(){
 		ArrayList<AcceptedOrder> allOrders;
-		OrderRequest orderRequestOne = new OrderRequest();
-		orderRequestOne.setUsername("Tester");
-		orderRequestOne.setAddress("Placeton");
-		orderRequestOne.setBricks(5);
+		OrderRequest orderRequestOne = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String referenceOne = handler.newOrderHandler(orderRequestOne);
-		OrderRequest orderRequestTwo = new OrderRequest();
-		orderRequestTwo.setUsername("TesterTwo");
-		orderRequestTwo.setAddress("PlacetonTwo");
-		orderRequestTwo.setBricks(6);
+		OrderRequest orderRequestTwo = orderFactory.createNewOrderRequest("TesterTwo", "PlacetonTwo", 6);
 		String referenceTwo = handler.newOrderHandler(orderRequestTwo);
-		OrderRequest orderRequestThree = new OrderRequest();
-		orderRequestThree.setUsername("TesterThree");
-		orderRequestThree.setAddress("PlacetonThree");
-		orderRequestThree.setBricks(7);
+		OrderRequest orderRequestThree = orderFactory.createNewOrderRequest("TesterThree", "PlacetonThree", 7);
 		String referenceThree = handler.newOrderHandler(orderRequestThree);
 		allOrders = handler.getAllOrders();
 		
@@ -111,10 +96,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyUpdateAcceptedOrderUpdatesOrdersIfReferenceIsValid(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
 		assertTrue(handler.getAllOrders().size() == 1);
@@ -128,10 +110,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyUpdateAcceptedOrderDoesNotChangeDatabaseIfReferenceIsNotFound(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
 		assertTrue(handler.getAllOrders().size() == 1);
@@ -143,10 +122,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyUpdateAcceptedOrderDoesNotChangeDatabaseIfBricksIsLessThanOne(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
 		assertTrue(handler.getAllOrders().size() == 1);
@@ -158,10 +134,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyFulfilOrderByReferenceUpdatesShippingStatusWithValidReference(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
 		assertTrue(acceptedOrder.getShipped() == false);
@@ -174,10 +147,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyFulfilOrderByReferenceReturns400ErrorWithInvalidReference(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
 		assertTrue(acceptedOrder.getShipped() == false);
@@ -190,10 +160,7 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyUpdateAcceptedOrderReturns400ErrorShippedEqualsTrue(){
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		String reference = handler.newOrderHandler(orderRequest);
 		handler.fulfilOrderByReference(reference);
 		String response = handler.updateAcceptedOrder(reference, 7);

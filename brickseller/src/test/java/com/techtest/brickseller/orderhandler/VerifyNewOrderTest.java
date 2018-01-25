@@ -7,15 +7,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.techtest.brickseller.objects.OrderRequest;
+import com.techtest.brickseller.objects.OrderRequestFactory;
 
 public class VerifyNewOrderTest {
 
 	VerifyNewOrder verifier;
 	OrderRequest orderRequest;
+	OrderRequestFactory orderFactory;
 	
 	@Before
 	public void setUp() throws Exception {
 		verifier = new VerifyNewOrder();
+		orderFactory = new OrderRequestFactory();
 	}
 
 	@After
@@ -24,44 +27,31 @@ public class VerifyNewOrderTest {
 
 	@Test
 	public void verifyNewOrderVerificationReturnsTrueWithValidInputs() {
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 5);
 		assertTrue(verifier.verififyInput(orderRequest));
 	}
 	
 	@Test
 	public void verifyNewOrderVerificationReturnsFalseWithInvalidLengthUsername() {
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tes");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tes", "Placeton", 5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
 	@Test
 	public void verifyNewOrderVerificationReturnsFalseWithNullUsername() {
-		orderRequest = new OrderRequest();
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest(null, "Placeton", 5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
 	@Test
 	public void verifyNewOrderVerificationReturnsFalseWithNullAddress() {
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setBricks(5);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", null, 5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
 	@Test
 	public void verifyNewOrderVerificationReturnsFalseWithZeroBricks() {
-		orderRequest = new OrderRequest();
-		orderRequest.setUsername("Tester");
-		orderRequest.setAddress("Placeton");
-		orderRequest.setBricks(0);
+		orderRequest = orderFactory.createNewOrderRequest("Tester", "Placeton", 0);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 
