@@ -6,24 +6,11 @@ public class AcceptedOrder {
 	private String address;
 	private int bricks;
 	private boolean shipped;
-
 	public String getReference() {
 		return reference;
 	}
 	public void setReference(String reference) {
 		this.reference = reference;
-	}
-	public int getBricks() {
-		return bricks;
-	}
-	public void setBricks(int bricks) {
-		this.bricks = bricks;
-	}
-	public boolean isShipped() {
-		return shipped;
-	}
-	public void setShipped(boolean shipped) {
-		this.shipped = shipped;
 	}
 	public String getUsername() {
 		return username;
@@ -37,16 +24,17 @@ public class AcceptedOrder {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getPostcode() {
-		return address;
-	}
-	public void setPostcode(String postcode) {
-		this.address = postcode;
-	}
-	public int getNumberOfBricks() {
+	public int getBricks() {
 		return bricks;
 	}
-	public void setNumberOfBricks(int numberOfBricks) {
-		this.bricks = numberOfBricks;
+	public void setBricks(int bricks) {
+		this.bricks = bricks;
 	}
+	public boolean getShipped() {
+		return shipped;
+	}
+	public void setShipped(boolean shipped) {
+		this.shipped = shipped;
+	}
+
 }

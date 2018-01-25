@@ -27,7 +27,7 @@ public class VerifyNewOrderTest {
 		orderRequest = new OrderRequest();
 		orderRequest.setUsername("Tester");
 		orderRequest.setAddress("Placeton");
-		orderRequest.setNumberOfBricks(5);
+		orderRequest.setBricks(5);
 		assertTrue(verifier.verififyInput(orderRequest));
 	}
 	
@@ -36,7 +36,7 @@ public class VerifyNewOrderTest {
 		orderRequest = new OrderRequest();
 		orderRequest.setUsername("Tes");
 		orderRequest.setAddress("Placeton");
-		orderRequest.setNumberOfBricks(5);
+		orderRequest.setBricks(5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
@@ -44,7 +44,7 @@ public class VerifyNewOrderTest {
 	public void verifyNewOrderVerificationReturnsFalseWithNullUsername() {
 		orderRequest = new OrderRequest();
 		orderRequest.setAddress("Placeton");
-		orderRequest.setNumberOfBricks(5);
+		orderRequest.setBricks(5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
@@ -52,7 +52,7 @@ public class VerifyNewOrderTest {
 	public void verifyNewOrderVerificationReturnsFalseWithNullAddress() {
 		orderRequest = new OrderRequest();
 		orderRequest.setUsername("Tester");
-		orderRequest.setNumberOfBricks(5);
+		orderRequest.setBricks(5);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 	
@@ -61,7 +61,7 @@ public class VerifyNewOrderTest {
 		orderRequest = new OrderRequest();
 		orderRequest.setUsername("Tester");
 		orderRequest.setAddress("Placeton");
-		orderRequest.setNumberOfBricks(0);
+		orderRequest.setBricks(0);
 		assertFalse(verifier.verififyInput(orderRequest));
 	}
 

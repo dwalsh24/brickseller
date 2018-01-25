@@ -18,10 +18,11 @@ public class OrderRequest {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public int getNumberOfBricks() {
+	public int getBricks() {
 		return bricks;
 	}
-	public void setNumberOfBricks(int numberOfBricks) {
-		this.bricks = numberOfBricks;
+	public void setBricks(int bricks) {
+		this.bricks = bricks;
 	}
+
 }
