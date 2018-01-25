@@ -44,5 +44,18 @@ public class Handler {
 	public ArrayList<AcceptedOrder> getAllOrders(){
 		return orders.getMockDatabase();
 	}
+	
+	public String updateAcceptedOrder(String reference, int updatedBricks){
+		AcceptedOrder orderToUpdate = getOrderByReference(reference);
+		if(orderToUpdate == null || updatedBricks < 1){
+			return null;
+		}
+		String newOrderReference = generateOrderReference.generateReference(orderToUpdate.getUsername());
+		orders.removeOrderFromDatabaseByReference(reference);
+		orderToUpdate.setReference(newOrderReference);
+		orderToUpdate.setBricks(updatedBricks);
+		orders.addOrderToMockDatabase(orderToUpdate);
+		return newOrderReference;
+	}
 
 }

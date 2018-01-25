@@ -21,6 +21,7 @@ public class HandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		handler = new Handler();
+		Handler.orders = new Orders();
 	}
 
 	@After
@@ -71,7 +72,6 @@ public class HandlerTest {
 	
 	@Test
 	public void verifyGetAllOrdersReturnsAllCurrentAcceptedOrders(){
-		Handler.orders = new Orders();
 		ArrayList<AcceptedOrder> allOrders;
 		OrderRequest orderRequestOne = new OrderRequest();
 		orderRequestOne.setUsername("Tester");
@@ -107,6 +107,39 @@ public class HandlerTest {
 		assertTrue(allOrders.get(2).getBricks() == 7);
 		assertTrue(allOrders.get(2).getReference().equals(referenceThree));
 		assertTrue(allOrders.get(2).getShipped() == false);
+	}
+	
+	@Test
+	public void verifyUpdateAcceptedOrderUpdatesOrdersIfReferenceIsValid(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
+		assertTrue(handler.getAllOrders().size() == 1);
+		
+		String updatedReference = handler.updateAcceptedOrder(reference, 7);
+		assertNotNull(updatedReference);
+		assertNull(handler.getOrderByReference(reference));
+		assertTrue(handler.getOrderByReference(updatedReference).getBricks() == 7);
+		assertTrue(handler.getAllOrders().size() == 1);
+	}
+	
+	@Test
+	public void verifyUpdateAcceptedOrderDoesNotChangeDatabaseIfReferenceIsNotFound(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
+		assertTrue(handler.getAllOrders().size() == 1);
+		String updatedReference = handler.updateAcceptedOrder("IncorrectReference", 7);
+		assertNull(updatedReference);
+		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
+		assertTrue(handler.getAllOrders().size() == 1);
+		
 	}
 
 }

@@ -18,4 +18,13 @@ public class Orders {
 		mockDatabase.add(order);
 	}
 	
+	public void removeOrderFromDatabaseByReference(String reference){
+		for(AcceptedOrder x: mockDatabase){
+			if(x.getReference().equals(reference)){
+				mockDatabase.remove(x);
+				break;
+			}
+		}
+	}
+	
 }
