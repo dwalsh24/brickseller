@@ -166,7 +166,7 @@ public class HandlerTest {
 		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
 		assertTrue(acceptedOrder.getShipped() == false);
 		
-		String response = handler.fulfilOrderByReference(reference, true);
+		String response = handler.fulfilOrderByReference(reference);
 		acceptedOrder = handler.getOrderByReference(reference);
 		assertTrue(response.equals("Set shipped status to true"));
 		assertTrue(acceptedOrder.getShipped() == true);
@@ -182,10 +182,22 @@ public class HandlerTest {
 		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
 		assertTrue(acceptedOrder.getShipped() == false);
 		
-		String response = handler.fulfilOrderByReference("Invalid reference", true);
+		String response = handler.fulfilOrderByReference("Invalid reference");
 		acceptedOrder = handler.getOrderByReference(reference);
-		assertTrue(response.equals("400 bad request response"));
+		assertTrue(response.equals("400 Error: Bad Request"));
 		assertTrue(acceptedOrder.getShipped() == false);
+	}
+	
+	@Test
+	public void verifyUpdateAcceptedOrderReturns400ErrorShippedEqualsTrue(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		handler.fulfilOrderByReference(reference);
+		String response = handler.updateAcceptedOrder(reference, 7);
+		assertTrue(response.equals("400 Error: Bad Request"));
 	}
 
 }

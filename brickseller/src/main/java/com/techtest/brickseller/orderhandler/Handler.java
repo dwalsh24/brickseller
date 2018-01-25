@@ -50,6 +50,9 @@ public class Handler {
 		if(orderToUpdate == null || updatedBricks < 1){
 			return null;
 		}
+		if(orderToUpdate.getShipped()){
+			return "400 Error: Bad Request";
+		}
 		String newOrderReference = generateOrderReference.generateReference(orderToUpdate.getUsername());
 		orders.removeOrderFromDatabaseByReference(reference);
 		orderToUpdate.setReference(newOrderReference);
@@ -58,13 +61,13 @@ public class Handler {
 		return newOrderReference;
 	}
 	
-	public String fulfilOrderByReference(String reference, boolean shipped){
+	public String fulfilOrderByReference(String reference){
 		AcceptedOrder orderToUpdate = getOrderByReference(reference);
 		if(orderToUpdate == null){
-			return "400 bad request response";
+			return "400 Error: Bad Request";
 		}
-		orders.updateShippedStatusByReference(reference, shipped);
-		return "Set shipped status to " + shipped;
+		orders.updateShippedStatusByReference(reference);
+		return "Set shipped status to true";
 	}
 
 }

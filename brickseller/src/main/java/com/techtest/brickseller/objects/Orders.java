@@ -27,10 +27,10 @@ public class Orders {
 		}
 	}
 	
-	public void updateShippedStatusByReference(String reference, boolean shippedStatus){
+	public void updateShippedStatusByReference(String reference){
 		for(AcceptedOrder x: mockDatabase){
 			if(x.getReference().equals(reference)){
-				x.setShipped(shippedStatus);
+				x.setShipped(true);
 				break;
 			}
 		}
