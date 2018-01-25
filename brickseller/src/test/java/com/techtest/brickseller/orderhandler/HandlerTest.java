@@ -139,7 +139,53 @@ public class HandlerTest {
 		assertNull(updatedReference);
 		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
 		assertTrue(handler.getAllOrders().size() == 1);
+	}
+	
+	@Test
+	public void verifyUpdateAcceptedOrderDoesNotChangeDatabaseIfBricksIsLessThanOne(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
+		assertTrue(handler.getAllOrders().size() == 1);
+		String updatedReference = handler.updateAcceptedOrder("IncorrectReference", 0);
+		assertNull(updatedReference);
+		assertTrue(handler.getOrderByReference(reference).getBricks() == 5);
+		assertTrue(handler.getAllOrders().size() == 1);
+	}
+	
+	@Test
+	public void verifyFulfilOrderByReferenceUpdatesShippingStatusWithValidReference(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
+		assertTrue(acceptedOrder.getShipped() == false);
 		
+		String response = handler.fulfilOrderByReference(reference, true);
+		acceptedOrder = handler.getOrderByReference(reference);
+		assertTrue(response.equals("Set shipped status to true"));
+		assertTrue(acceptedOrder.getShipped() == true);
+	}
+	
+	@Test
+	public void verifyFulfilOrderByReferenceReturns400ErrorWithInvalidReference(){
+		orderRequest = new OrderRequest();
+		orderRequest.setUsername("Tester");
+		orderRequest.setAddress("Placeton");
+		orderRequest.setBricks(5);
+		String reference = handler.newOrderHandler(orderRequest);
+		AcceptedOrder acceptedOrder = handler.getOrderByReference(reference);
+		assertTrue(acceptedOrder.getShipped() == false);
+		
+		String response = handler.fulfilOrderByReference("Invalid reference", true);
+		acceptedOrder = handler.getOrderByReference(reference);
+		assertTrue(response.equals("400 bad request response"));
+		assertTrue(acceptedOrder.getShipped() == false);
 	}
 
 }

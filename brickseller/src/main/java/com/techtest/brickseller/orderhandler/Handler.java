@@ -57,5 +57,14 @@ public class Handler {
 		orders.addOrderToMockDatabase(orderToUpdate);
 		return newOrderReference;
 	}
+	
+	public String fulfilOrderByReference(String reference, boolean shipped){
+		AcceptedOrder orderToUpdate = getOrderByReference(reference);
+		if(orderToUpdate == null){
+			return "400 bad request response";
+		}
+		orders.updateShippedStatusByReference(reference, shipped);
+		return "Set shipped status to " + shipped;
+	}
 
 }
